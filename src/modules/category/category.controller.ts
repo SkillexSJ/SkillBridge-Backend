@@ -11,7 +11,7 @@ const createCategory = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getAllCategories = asyncHandler(async (req: Request, res: Response) => {
-  const result = await CategoryService.getAllCategories();
+  const result = await CategoryService.getAllCategories(req.query);
   sendSuccess(res, result, "Categories fetched successfully");
 });
 

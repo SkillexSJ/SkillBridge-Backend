@@ -1,19 +1,7 @@
 import { prisma } from "../../lib/prisma";
 import { Prisma, Review } from "../../generated/prisma/client";
-
-interface CreateReviewInput {
-  bookingId: string;
-  rating: number | string;
-  comment?: string;
-}
-
-interface ReviewQueryParams {
-  page?: number | string;
-  limit?: number | string;
-  tutorId?: string;
-  studentId?: string;
-  sortBy?: "newest" | "oldest" | "rating_asc" | "rating_desc";
-}
+import { calculatePagination } from "../../utils/pagination";
+import { CreateReviewInput, ReviewQueryParams } from "./review.type";
 
 const createReview = async (
   studentId: string,
@@ -48,10 +36,8 @@ const getAllReviews = async (
   data: Review[];
   meta: { total: number; page: number; limit: number };
 }> => {
-  const { page = 1, limit = 10, tutorId, studentId, sortBy } = params;
-  const pageNum = Number(page);
-  const limitNum = Number(limit);
-  const skip = (pageNum - 1) * limitNum;
+  const { tutorId, studentId, sortBy } = params;
+  const { page, limit, skip } = calculatePagination(params);
 
   const where: Prisma.ReviewWhereInput = {};
 
@@ -94,7 +80,7 @@ const getAllReviews = async (
       },
       orderBy,
       skip,
-      take: limitNum,
+      take: limit,
     }),
     prisma.review.count({ where }),
   ]);
@@ -103,8 +89,8 @@ const getAllReviews = async (
     data: reviews,
     meta: {
       total,
-      page: pageNum,
-      limit: limitNum,
+      page,
+      limit,
     },
   };
 };

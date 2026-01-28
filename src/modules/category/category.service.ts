@@ -1,5 +1,7 @@
 import { Category } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
+import { calculatePagination } from "../../utils/pagination";
+import { CategoryQueryParams } from "./category.type";
 
 const createCategory = async (data: Category) => {
   return await prisma.category.create({
@@ -7,21 +9,28 @@ const createCategory = async (data: Category) => {
   });
 };
 
-const getAllCategories = async () => {
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: { tutorProfiles: true },
+const getAllCategories = async (params: CategoryQueryParams = {}) => {
+  const { page, limit, skip } = calculatePagination(params);
+
+  const [categories, total] = await Promise.all([
+    prisma.category.findMany({
+      include: {
+        _count: {
+          select: { tutorProfiles: true },
+        },
       },
-    },
-  });
+      skip,
+      take: limit,
+    }),
+    prisma.category.count(),
+  ]);
 
   return {
     data: categories,
     meta: {
-      total: categories.length,
-      page: 1,
-      limit: categories.length,
+      total,
+      page,
+      limit,
     },
   };
 };

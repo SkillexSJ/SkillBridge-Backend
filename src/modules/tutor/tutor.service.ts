@@ -1,80 +1,26 @@
 import { prisma } from "../../lib/prisma";
-import { Prisma, TutorProfile, AvailabilitySlot } from "../../generated/prisma/client";
-
-interface TutorQueryParams {
-  searchTerm?: string;
-  categoryId?: string;
-  minPrice?: string;
-  maxPrice?: string;
-  sortBy?: string;
-  page?: string | number;
-  limit?: string | number;
-}
-
-// Define the type for the tutor profile with included relations as returned by getAllTutors
-type TutorWithRelations = Prisma.TutorProfileGetPayload<{
-  include: {
-    user: {
-      select: {
-        id: true;
-        name: true;
-        image: true;
-      };
-    };
-    category: true;
-    reviews: {
-      select: {
-        rating: true;
-      };
-    };
-  };
-}>;
-
-// Define the type for the tutor profile with full details as returned by getTutorById
-type TutorDetails = Prisma.TutorProfileGetPayload<{
-  include: {
-    user: {
-      select: {
-        id: true;
-        name: true;
-        image: true;
-        email: true;
-      };
-    };
-    category: true;
-    reviews: {
-      include: {
-        student: {
-          select: {
-            name: true;
-            image: true;
-          };
-        };
-      };
-    };
-    availabilitySlots: true;
-  };
-}>;
+import {
+  Prisma,
+  TutorProfile,
+  AvailabilitySlot,
+} from "../../generated/prisma/client";
+import { calculatePagination } from "../../utils/pagination";
+import {
+  TutorQueryParams,
+  TutorWithRelations,
+  TutorDetails,
+  SlotInput,
+} from "./tutor.type";
+import { Meta } from "../../interfaces";
 
 const getAllTutors = async (
   params: TutorQueryParams,
 ): Promise<{
   data: TutorWithRelations[];
-  meta: { total: number; page: number; limit: number };
+  meta: Meta;
 }> => {
-  const {
-    searchTerm,
-    categoryId,
-    minPrice,
-    maxPrice,
-    sortBy,
-    page = 1,
-    limit = 10,
-  } = params;
-
-  const pageNum = Number(page);
-  const limitNum = Number(limit);
-  const skip = (pageNum - 1) * limitNum;
+  const { searchTerm, categoryId, minPrice, maxPrice, sortBy } = params;
+  const { page, limit, skip } = calculatePagination(params);
 
   const where: Prisma.TutorProfileWhereInput = {};
 
@@ -124,7 +70,7 @@ const getAllTutors = async (
       },
       orderBy,
       skip,
-      take: limitNum,
+      take: limit,
     }),
     prisma.tutorProfile.count({ where }),
   ]);
@@ -133,8 +79,8 @@ const getAllTutors = async (
     data: tutors,
     meta: {
       total,
-      page: pageNum,
-      limit: limitNum,
+      page,
+      limit,
     },
   };
 };
@@ -196,12 +142,6 @@ const createTutorProfile = async (
 
   return profile;
 };
-
-interface SlotInput {
-  dayOfWeek: number;
-  startTime: string;
-  endTime: string;
-}
 
 const updateAvailability = async (
   tutorProfileId: string,

@@ -17,6 +17,19 @@ const getMyBookings = asyncHandler(async (req: Request, res: Response) => {
   sendSuccess(res, result, "Bookings fetched successfully");
 });
 
+const getBookingById = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+  const role = req.user!.role; // "STUDENT" or "TUTOR" or "ADMIN"
+
+  const booking = await BookingService.getBookingById(
+    req.params.id as string,
+    userId,
+    role,
+  );
+
+  sendSuccess(res, { data: booking }, "Booking fetched successfully");
+});
+
 const updateBookingStatus = asyncHandler(async (req: Request, res: Response) => {
     // Only tutor or admin should do this (checked by middleware)
     const { id } = req.params;
@@ -29,5 +42,6 @@ const updateBookingStatus = asyncHandler(async (req: Request, res: Response) => 
 export const BookingController = {
   createBooking,
   getMyBookings,
+  getBookingById,
   updateBookingStatus,
 };
