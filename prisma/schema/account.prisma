@@ -1,0 +1,100 @@
+enum Role {
+  student
+  tutor
+  admin
+}
+
+model TutorProfile {
+  id                   String             @id @default(uuid())
+  userId               String             @unique
+  // Relation to User
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId           String
+  // Relation to Category
+  category             Category           @relation(fields: [categoryId], references: [id])
+  bio                  String             @db.Text
+  specialty            String
+  experience           String
+  hourlyRate           Decimal
+  location             String?
+  expertise            String[] @default([]) // Stored as array of strings
+  socialLinks          String[] @default([])// Stored as JSON 
+  totalMentoringMins   Int                @default(0)
+  totalSessions        Int                @default(0)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  bookings             Booking[]
+  reviews              Review[]
+  availabilitySlots    AvailabilitySlot[]
+
+  @@map("tutor_profiles")
+}
+
+
+model User {
+  id              String        @id
+  name            String
+  email           String
+  emailVerified   Boolean       @default(false)
+  image           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  role            Role          @default(student)
+  isVerified      Boolean       @default(false)
+  sessions        Session[]
+  accounts        Account[]
+  tutorProfile    TutorProfile?
+  studentBookings Booking[]     @relation("StudentBookings")
+  reviews         Review[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}

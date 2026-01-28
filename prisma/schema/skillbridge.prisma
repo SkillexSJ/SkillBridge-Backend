@@ -1,0 +1,11 @@
+
+model AvailabilitySlot {
+  id             String       @id @default(uuid())
+  tutorProfileId String
+  tutorProfile   TutorProfile @relation(fields: [tutorProfileId], references: [id], onDelete: Cascade)
+  dayOfWeek      Int // 0-6 (Sun-Sat)
+  startTime      DateTime     @db.Time
+  endTime        DateTime     @db.Time
+
+  @@map("availability_slots")
+}
