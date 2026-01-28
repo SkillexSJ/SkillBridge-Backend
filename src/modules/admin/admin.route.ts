@@ -1,10 +1,14 @@
 import { Router } from "express";
 import { AdminController } from "./admin.controller";
+import authMiddleware, { UserRole } from "../../middlewares/auth";
 
 const router: Router = Router();
 
-// Should have admin middleware check
-router.get("/users", AdminController.getAllUsers);
-router.patch("/users/:id", AdminController.blockUser);
+router.get("/users", authMiddleware(UserRole.ADMIN), AdminController.getAllUsers);
+router.patch(
+  "/users/:id",
+  authMiddleware(UserRole.ADMIN),
+  AdminController.blockUser,
+);
 
 export const AdminRoutes = router;

@@ -1,8 +1,76 @@
 import { prisma } from "../../lib/prisma";
-import { Prisma, TutorProfile } from "../../generated/prisma/client";
+import { Prisma, TutorProfile, AvailabilitySlot } from "../../generated/prisma/client";
 
-const getAllTutors = async (params: any) => {
-  const { searchTerm, categoryId, minPrice, maxPrice, sortBy, page = 1, limit = 10 } = params;
+interface TutorQueryParams {
+  searchTerm?: string;
+  categoryId?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  sortBy?: string;
+  page?: string | number;
+  limit?: string | number;
+}
+
+// Define the type for the tutor profile with included relations as returned by getAllTutors
+type TutorWithRelations = Prisma.TutorProfileGetPayload<{
+  include: {
+    user: {
+      select: {
+        id: true;
+        name: true;
+        image: true;
+      };
+    };
+    category: true;
+    reviews: {
+      select: {
+        rating: true;
+      };
+    };
+  };
+}>;
+
+// Define the type for the tutor profile with full details as returned by getTutorById
+type TutorDetails = Prisma.TutorProfileGetPayload<{
+  include: {
+    user: {
+      select: {
+        id: true;
+        name: true;
+        image: true;
+        email: true;
+      };
+    };
+    category: true;
+    reviews: {
+      include: {
+        student: {
+          select: {
+            name: true;
+            image: true;
+          };
+        };
+      };
+    };
+    availabilitySlots: true;
+  };
+}>;
+
+const getAllTutors = async (
+  params: TutorQueryParams,
+): Promise<{
+  data: TutorWithRelations[];
+  meta: { total: number; page: number; limit: number };
+}> => {
+  const {
+    searchTerm,
+    categoryId,
+    minPrice,
+    maxPrice,
+    sortBy,
+    page = 1,
+    limit = 10,
+  } = params;
 
   const pageNum = Number(page);
   const limitNum = Number(limit);
@@ -71,7 +139,7 @@ const getAllTutors = async (params: any) => {
   };
 };
 
-const getTutorById = async (id: string) => {
+const getTutorById = async (id: string): Promise<TutorDetails | null> => {
   const tutor = await prisma.tutorProfile.findUnique({
     where: { id },
     include: {
@@ -100,7 +168,10 @@ const getTutorById = async (id: string) => {
   return tutor;
 };
 
-const createTutorProfile = async (userId: string, data: any) => {
+const createTutorProfile = async (
+  userId: string,
+  data: Prisma.TutorProfileUncheckedCreateInput,
+): Promise<TutorProfile> => {
   // Check if profile exists
   const existing = await prisma.tutorProfile.findUnique({
     where: { userId },
@@ -126,7 +197,16 @@ const createTutorProfile = async (userId: string, data: any) => {
   return profile;
 };
 
-const updateAvailability = async (tutorProfileId: string, slots: any[]) => {
+interface SlotInput {
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+}
+
+const updateAvailability = async (
+  tutorProfileId: string,
+  slots: SlotInput[],
+): Promise<AvailabilitySlot[]> => {
   // Transaction to replace slots
   return await prisma.$transaction(async (tx) => {
     await tx.availabilitySlot.deleteMany({
