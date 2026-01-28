@@ -1,8 +1,12 @@
 import { prisma } from "../../lib/prisma";
-import { Prisma } from "../../generated/prisma/client";
+import { Prisma, TutorProfile } from "../../generated/prisma/client";
 
 const getAllTutors = async (params: any) => {
-  const { searchTerm, categoryId, minPrice, maxPrice, sortBy } = params;
+  const { searchTerm, categoryId, minPrice, maxPrice, sortBy, page = 1, limit = 10 } = params;
+
+  const pageNum = Number(page);
+  const limitNum = Number(limit);
+  const skip = (pageNum - 1) * limitNum;
 
   const where: Prisma.TutorProfileWhereInput = {};
 
@@ -15,7 +19,6 @@ const getAllTutors = async (params: any) => {
   }
 
   if (categoryId) {
-    ``;
     where.categoryId = categoryId;
   }
 
@@ -33,27 +36,39 @@ const getAllTutors = async (params: any) => {
   if (sortBy === "price_desc") orderBy = { hourlyRate: "desc" };
   if (sortBy === "rating") orderBy = { createdAt: "desc" }; // TODO: Sort by rating when aggregated
 
-  const tutors = await prisma.tutorProfile.findMany({
-    where,
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
+  const [tutors, total] = await Promise.all([
+    prisma.tutorProfile.findMany({
+      where,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+        category: true,
+        reviews: {
+          select: {
+            rating: true,
+          },
         },
       },
-      category: true,
-      reviews: {
-        select: {
-          rating: true,
-        },
-      },
-    },
-    orderBy,
-  });
+      orderBy,
+      skip,
+      take: limitNum,
+    }),
+    prisma.tutorProfile.count({ where }),
+  ]);
 
-  return tutors;
+  return {
+    data: tutors,
+    meta: {
+      total,
+      page: pageNum,
+      limit: limitNum,
+    },
+  };
 };
 
 const getTutorById = async (id: string) => {

@@ -1,25 +1,20 @@
 import { Request, Response } from "express";
 import { TutorService } from "./tutor.service";
 import { asyncHandler } from "../../middlewares/asyncHandler";
+import { sendSuccess } from "../../utils/response";
 
 const getAllTutors = asyncHandler(async (req: Request, res: Response) => {
-  const tutors = await TutorService.getAllTutors(req.query);
-  res.status(200).json({
-    success: true,
-    data: tutors,
-  });
+  const result = await TutorService.getAllTutors(req.query);
+  sendSuccess(res, result, "Tutors fetched successfully");
 });
 
 const getTutorById = asyncHandler(async (req: Request, res: Response) => {
-  const tutor = await TutorService.getTutorById(req.params.id);
+  const tutor = await TutorService.getTutorById(req.params.id as string);
   if (!tutor) {
      res.status(404).json({ message: "Tutor not found" });
      return;
   }
-  res.status(200).json({
-    success: true,
-    data: tutor,
-  });
+  sendSuccess(res, { data: tutor }, "Tutor fetched successfully");
 });
 
 const createTutorProfile = asyncHandler(async (req: Request, res: Response) => {
@@ -29,10 +24,7 @@ const createTutorProfile = asyncHandler(async (req: Request, res: Response) => {
      return;
   }
   const tutor = await TutorService.createTutorProfile(userId, req.body);
-  res.status(201).json({
-    success: true,
-    data: tutor,
-  });
+  sendSuccess(res, { data: tutor }, "Tutor profile created successfully", 201);
 });
 
 const updateAvailability = asyncHandler(async (req: Request, res: Response) => {
@@ -50,10 +42,7 @@ const updateAvailability = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const slots = await TutorService.updateAvailability(profile.id, req.body.slots);
-  res.status(200).json({
-    success: true,
-    data: slots,
-  });
+  sendSuccess(res, { data: slots }, "Availability updated successfully");
 });
 
 export const TutorController = {

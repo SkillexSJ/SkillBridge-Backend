@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import { asyncHandler } from "../../middlewares/asyncHandler";
+import { sendSuccess } from "../../utils/response";
 
 const getProfile = asyncHandler(async (req: Request, res: Response) => {
   // Assuming user id is attached to req.user?.id by auth middleware
@@ -22,10 +23,7 @@ const getProfile = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const user = await UserService.getProfile(userId);
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
+  sendSuccess(res, { data: user }, "Profile fetched successfully");
 });
 
 const updateProfile = asyncHandler(async (req: Request, res: Response) => {
@@ -37,10 +35,7 @@ const updateProfile = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const user = await UserService.updateProfile(userId, req.body);
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
+  sendSuccess(res, { data: user }, "Profile updated successfully");
 });
 
 export const UserController = {

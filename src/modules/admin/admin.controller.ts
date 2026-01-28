@@ -1,23 +1,17 @@
 import { Request, Response } from "express";
 import { AdminService } from "./admin.service";
 import { asyncHandler } from "../../middlewares/asyncHandler";
+import { sendSuccess } from "../../utils/response";
 
 const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
-  const users = await AdminService.getAllUsers();
-  res.status(200).json({
-    success: true,
-    data: users,
-  });
+  const result = await AdminService.getAllUsers(req.query);
+  sendSuccess(res, result, "Users fetched successfully");
 });
 
 const blockUser = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await AdminService.blockUser(id);
-    res.status(200).json({
-        success: true,
-        message: "User status updated",
-        data: result
-    });
+    const result = await AdminService.blockUser(id as string);
+    sendSuccess(res, { data: result }, "User status updated");
 });
 
 export const AdminController = {

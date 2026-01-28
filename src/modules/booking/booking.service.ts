@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { BookingStatus } from "../../generated/prisma/client";
+import { BookingStatus, Prisma } from "../../generated/prisma/client";
 
 const createBooking = async (studentId: string, data: any) => {
   const { tutorProfileId, sessionDate, startTime, endTime, totalPrice } = data;
@@ -18,39 +18,57 @@ const createBooking = async (studentId: string, data: any) => {
   return booking;
 };
 
-const getUserBookings = async (userId: string, role: string) => {
-  if (role === "tutor") {
-    // Need to find the tutor profile first
-    const tutorProfile = await prisma.tutorProfile.findUnique({
-        where: { userId },
-    });
-    if (!tutorProfile) return [];
+const getUserBookings = async (userId: string, role: string, params: any = {}) => {
+  const { page = 1, limit = 10 } = params;
+  const pageNum = Number(page);
+  const limitNum = Number(limit);
+  const skip = (pageNum - 1) * limitNum;
 
-    return await prisma.booking.findMany({
-      where: { tutorProfileId: tutorProfile.id },
-      include: {
-        student: {
-          select: { name: true, image: true, email: true }
-        }
-      },
-      orderBy: { sessionDate: "desc" },
+  const where: Prisma.BookingWhereInput = {};
+
+  if (role === "tutor") {
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: { userId },
     });
+    if (!tutorProfile) {
+      return {
+        data: [],
+        meta: { total: 0, page: pageNum, limit: limitNum },
+      };
+    }
+    where.tutorProfileId = tutorProfile.id;
   } else {
-    // Student
-    return await prisma.booking.findMany({
-      where: { studentId: userId },
-      include: {
-        tutorProfile: {
-          include: {
-            user: {
-                select: { name: true, image: true }
-            }
-          }
-        }
-      },
-      orderBy: { sessionDate: "desc" },
-    });
+    where.studentId = userId;
   }
+
+  const include: Prisma.BookingInclude =
+    role === "tutor"
+      ? { student: { select: { name: true, image: true, email: true } } }
+      : {
+          tutorProfile: {
+            include: { user: { select: { name: true, image: true } } },
+          },
+        };
+
+  const [bookings, total] = await Promise.all([
+    prisma.booking.findMany({
+      where,
+      include,
+      orderBy: { sessionDate: "desc" },
+      skip,
+      take: limitNum,
+    }),
+    prisma.booking.count({ where }),
+  ]);
+
+  return {
+    data: bookings,
+    meta: {
+      total,
+      page: pageNum,
+      limit: limitNum,
+    },
+  };
 };
 
 const updateBookingStatus = async (bookingId: string, status: BookingStatus) => {

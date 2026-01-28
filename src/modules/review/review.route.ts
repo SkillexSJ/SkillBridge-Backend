@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ReviewController } from "./review.controller";
 
-const router = Router();
+const router: Router = Router();
 
 router.post("/", ReviewController.createReview);
 

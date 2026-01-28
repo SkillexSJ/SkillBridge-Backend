@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
 
-const router = Router();
+const router: Router = Router();
 
 // Routes
 // Assuming global auth middleware protects these or we add it here.

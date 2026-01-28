@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { TutorController } from "./tutor.controller";
 
-const router = Router();
+const router: Router = Router();
 
 router.get("/", TutorController.getAllTutors);
 router.get("/:id", TutorController.getTutorById);

@@ -1,11 +1,30 @@
 import { prisma } from "../../lib/prisma";
 
-const getAllUsers = async () => {
-  return await prisma.user.findMany({
-    include: {
-        tutorProfile: true
-    }
-  });
+const getAllUsers = async (params: any = {}) => {
+  const { page = 1, limit = 10 } = params;
+  const pageNum = Number(page);
+  const limitNum = Number(limit);
+  const skip = (pageNum - 1) * limitNum;
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      include: {
+        tutorProfile: true,
+      },
+      skip,
+      take: limitNum,
+    }),
+    prisma.user.count(),
+  ]);
+
+  return {
+    data: users,
+    meta: {
+      total,
+      page: pageNum,
+      limit: limitNum,
+    },
+  };
 };
 
 const blockUser = async (userId: string) => {

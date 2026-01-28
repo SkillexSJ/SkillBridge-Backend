@@ -16,16 +16,12 @@ const getAllCategories = async () => {
     },
   });
 
-  const totalTutors = categories.reduce(
-    (sum, cat) => sum + (cat._count?.tutorProfiles || 0),
-    0,
-  );
-
   return {
     data: categories,
     meta: {
-      totalCategories: categories.length,
-      totalTutors,
+      total: categories.length,
+      page: 1,
+      limit: categories.length,
     },
   };
 };
