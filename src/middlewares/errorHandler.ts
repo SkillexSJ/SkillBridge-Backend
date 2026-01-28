@@ -7,11 +7,11 @@ function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
+
+
   let statusCode = err.statusCode || err.status || 500;
   let message = err.message || "Internal Server Error";
   let details: any = null;
-
-  console.log(err);
 
   // ================================
   // Prisma Validation Error

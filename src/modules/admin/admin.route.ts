@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AdminController } from "./admin.controller";
 
-const router = Router();
+const router: Router = Router();
 
 // Should have admin middleware check
 router.get("/users", AdminController.getAllUsers);

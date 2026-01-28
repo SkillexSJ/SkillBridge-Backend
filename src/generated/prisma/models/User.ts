@@ -34,6 +34,7 @@ export type UserMinAggregateOutputType = {
   updatedAt: Date | null
   role: $Enums.Role | null
   isVerified: boolean | null
+  isBlocked: boolean | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -46,6 +47,7 @@ export type UserMaxAggregateOutputType = {
   updatedAt: Date | null
   role: $Enums.Role | null
   isVerified: boolean | null
+  isBlocked: boolean | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -58,6 +60,7 @@ export type UserCountAggregateOutputType = {
   updatedAt: number
   role: number
   isVerified: number
+  isBlocked: number
   _all: number
 }
 
@@ -72,6 +75,7 @@ export type UserMinAggregateInputType = {
   updatedAt?: true
   role?: true
   isVerified?: true
+  isBlocked?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -84,6 +88,7 @@ export type UserMaxAggregateInputType = {
   updatedAt?: true
   role?: true
   isVerified?: true
+  isBlocked?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -96,6 +101,7 @@ export type UserCountAggregateInputType = {
   updatedAt?: true
   role?: true
   isVerified?: true
+  isBlocked?: true
   _all?: true
 }
 
@@ -181,6 +187,7 @@ export type UserGroupByOutputType = {
   updatedAt: Date
   role: $Enums.Role
   isVerified: boolean
+  isBlocked: boolean
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -214,6 +221,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isVerified?: Prisma.BoolFilter<"User"> | boolean
+  isBlocked?: Prisma.BoolFilter<"User"> | boolean
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   tutorProfile?: Prisma.XOR<Prisma.TutorProfileNullableScalarRelationFilter, Prisma.TutorProfileWhereInput> | null
@@ -231,6 +239,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   tutorProfile?: Prisma.TutorProfileOrderByWithRelationInput
@@ -251,6 +260,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isVerified?: Prisma.BoolFilter<"User"> | boolean
+  isBlocked?: Prisma.BoolFilter<"User"> | boolean
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   tutorProfile?: Prisma.XOR<Prisma.TutorProfileNullableScalarRelationFilter, Prisma.TutorProfileWhereInput> | null
@@ -268,6 +278,7 @@ export type UserOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -286,6 +297,7 @@ export type UserScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isBlocked?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
 }
 
 export type UserCreateInput = {
@@ -298,6 +310,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileCreateNestedOneWithoutUserInput
@@ -315,6 +328,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -332,6 +346,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUpdateOneWithoutUserNestedInput
@@ -349,6 +364,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -366,6 +382,7 @@ export type UserCreateManyInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
 }
 
 export type UserUpdateManyMutationInput = {
@@ -378,6 +395,7 @@ export type UserUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -390,6 +408,7 @@ export type UserUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserScalarRelationFilter = {
@@ -407,6 +426,7 @@ export type UserCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -419,6 +439,7 @@ export type UserMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -431,6 +452,7 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutTutorProfileInput = {
@@ -521,6 +543,7 @@ export type UserCreateWithoutTutorProfileInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   studentBookings?: Prisma.BookingCreateNestedManyWithoutStudentInput
@@ -537,6 +560,7 @@ export type UserUncheckedCreateWithoutTutorProfileInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   studentBookings?: Prisma.BookingUncheckedCreateNestedManyWithoutStudentInput
@@ -569,6 +593,7 @@ export type UserUpdateWithoutTutorProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   studentBookings?: Prisma.BookingUpdateManyWithoutStudentNestedInput
@@ -585,6 +610,7 @@ export type UserUncheckedUpdateWithoutTutorProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   studentBookings?: Prisma.BookingUncheckedUpdateManyWithoutStudentNestedInput
@@ -601,6 +627,7 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileCreateNestedOneWithoutUserInput
   studentBookings?: Prisma.BookingCreateNestedManyWithoutStudentInput
@@ -617,6 +644,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileUncheckedCreateNestedOneWithoutUserInput
   studentBookings?: Prisma.BookingUncheckedCreateNestedManyWithoutStudentInput
@@ -649,6 +677,7 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUpdateOneWithoutUserNestedInput
   studentBookings?: Prisma.BookingUpdateManyWithoutStudentNestedInput
@@ -665,6 +694,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUncheckedUpdateOneWithoutUserNestedInput
   studentBookings?: Prisma.BookingUncheckedUpdateManyWithoutStudentNestedInput
@@ -681,6 +711,7 @@ export type UserCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileCreateNestedOneWithoutUserInput
   studentBookings?: Prisma.BookingCreateNestedManyWithoutStudentInput
@@ -697,6 +728,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileUncheckedCreateNestedOneWithoutUserInput
   studentBookings?: Prisma.BookingUncheckedCreateNestedManyWithoutStudentInput
@@ -729,6 +761,7 @@ export type UserUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUpdateOneWithoutUserNestedInput
   studentBookings?: Prisma.BookingUpdateManyWithoutStudentNestedInput
@@ -745,6 +778,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUncheckedUpdateOneWithoutUserNestedInput
   studentBookings?: Prisma.BookingUncheckedUpdateManyWithoutStudentNestedInput
@@ -761,6 +795,7 @@ export type UserCreateWithoutStudentBookingsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileCreateNestedOneWithoutUserInput
@@ -777,6 +812,7 @@ export type UserUncheckedCreateWithoutStudentBookingsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -809,6 +845,7 @@ export type UserUpdateWithoutStudentBookingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUpdateOneWithoutUserNestedInput
@@ -825,6 +862,7 @@ export type UserUncheckedUpdateWithoutStudentBookingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -841,6 +879,7 @@ export type UserCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileCreateNestedOneWithoutUserInput
@@ -857,6 +896,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   role?: $Enums.Role
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   tutorProfile?: Prisma.TutorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -889,6 +929,7 @@ export type UserUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUpdateOneWithoutUserNestedInput
@@ -905,6 +946,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   tutorProfile?: Prisma.TutorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -979,6 +1021,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   role?: boolean
   isVerified?: boolean
+  isBlocked?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   tutorProfile?: boolean | Prisma.User$tutorProfileArgs<ExtArgs>
@@ -997,6 +1040,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   role?: boolean
   isVerified?: boolean
+  isBlocked?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1009,6 +1053,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   role?: boolean
   isVerified?: boolean
+  isBlocked?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1021,9 +1066,10 @@ export type UserSelectScalar = {
   updatedAt?: boolean
   role?: boolean
   isVerified?: boolean
+  isBlocked?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "role" | "isVerified", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "role" | "isVerified" | "isBlocked", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -1054,6 +1100,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     updatedAt: Date
     role: $Enums.Role
     isVerified: boolean
+    isBlocked: boolean
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1491,6 +1538,7 @@ export interface UserFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isBlocked: Prisma.FieldRef<"User", 'Boolean'>
 }
     
 

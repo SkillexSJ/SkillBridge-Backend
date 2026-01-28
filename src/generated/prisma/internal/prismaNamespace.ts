@@ -1146,7 +1146,8 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   role: 'role',
-  isVerified: 'isVerified'
+  isVerified: 'isVerified',
+  isBlocked: 'isBlocked'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1216,7 +1217,7 @@ export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeo
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  iconName: 'iconName',
+  imageUrl: 'imageUrl',
   topics: 'topics',
   createdAt: 'createdAt'
 } as const

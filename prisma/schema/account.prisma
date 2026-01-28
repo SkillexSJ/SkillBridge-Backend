@@ -41,6 +41,7 @@ model User {
   updatedAt       DateTime      @updatedAt
   role            Role          @default(student)
   isVerified      Boolean       @default(false)
+  isBlocked       Boolean       @default(false)
   sessions        Session[]
   accounts        Account[]
   tutorProfile    TutorProfile?

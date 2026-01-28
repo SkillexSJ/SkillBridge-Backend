@@ -30,14 +30,14 @@ const authMiddleware = (...roles: UserRole[]) => {
         headers: req.headers as any,
       });
 
-      if (session && session.user) {
-        sendUnauthorized(res, "Unauthorized");
+      if (!session || !session.user) {
+        return sendUnauthorized(res, "Unauthorized");
       }
-      if (!session?.user.emailVerified) {
-        sendUnauthorized(res, "Email not verified");
+      if (!session.user.emailVerified) {
+        return sendUnauthorized(res, "Email not verified");
       }
 
-      const user = session!.user as any;
+      const user = session.user as any;
 
       if (user.isBlocked) {
         return sendUnauthorized(res, "User is blocked");
@@ -46,7 +46,7 @@ const authMiddleware = (...roles: UserRole[]) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role.toUpperCase(),
         emailVerified: user.emailVerified,
         isBlocked: !!user.isBlocked,
       };

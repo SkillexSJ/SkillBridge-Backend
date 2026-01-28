@@ -1,23 +1,37 @@
 import { Request, Response } from "express";
 import { CategoryService } from "./category.service";
 import { asyncHandler } from "../../middlewares/asyncHandler";
-import { sendCreated, sendSuccess } from "../../utils/response";
+import { sendCreated, sendSuccess, sendError } from "../../utils/response";
+import { Category } from "../../generated/prisma/client";
 
 const createCategory = asyncHandler(async (req: Request, res: Response) => {
-  const category = await CategoryService.createCategory(req.body);
+  const data = req.body as Category;
+  const category = await CategoryService.createCategory(data);
   sendCreated(res, category, "Category created successfully");
 });
 
 const getAllCategories = asyncHandler(async (req: Request, res: Response) => {
-  const categories = await CategoryService.getAllCategories();
-  sendSuccess(
-    res,
-    { data: categories, meta: [] },
-    "Categories fetched successfully",
-  );
+  const result = await CategoryService.getAllCategories();
+  sendSuccess(res, result, "Categories fetched successfully");
+});
+
+const getCategoryById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CategoryService.getCategoryById(id as string);
+
+  sendSuccess(res, { data: result }, "Category fetched successfully");
+});
+
+const deleteCategory = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const category = await CategoryService.deleteCategory(id as string);
+  sendSuccess(res, { data: category }, "Category deleted successfully");
 });
 
 export const CategoryController = {
   createCategory,
   getAllCategories,
+  getCategoryById,
+  deleteCategory,
 };
