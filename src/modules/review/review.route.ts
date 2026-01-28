@@ -4,9 +4,11 @@ import authMiddleware, { UserRole } from "../../middlewares/auth";
 
 const router: Router = Router();
 
+router.get("/", ReviewController.getAllReviews);
+router.get("/:id", ReviewController.getReviewById);
 router.post(
   "/",
-  authMiddleware(UserRole.STUDENT),
+  authMiddleware(UserRole.STUDENT, UserRole.ADMIN),
   ReviewController.createReview,
 );
 
