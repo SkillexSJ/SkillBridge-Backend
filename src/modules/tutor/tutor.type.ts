@@ -5,7 +5,6 @@ export interface TutorQueryParams extends BaseQueryParams {
   categoryId?: string;
   minPrice?: string;
   maxPrice?: string;
-  // sortBy is already in BaseQueryParams but can be specific here if needed
 }
 
 export interface SlotInput {
@@ -13,27 +12,41 @@ export interface SlotInput {
   startTime: string;
   endTime: string;
 }
-
-// Define the type for the tutor profile with included relations as returned by getAllTutors
+// for all tutors
 export type TutorWithRelations = Prisma.TutorProfileGetPayload<{
-  include: {
+  select: {
+    id: true;
+    bio: true;
+    specialty: true;
+    experience: true;
+    hourlyRate: true;
+    location: true;
+    totalMentoringMins: true;
+    totalSessions: true;
     user: {
       select: {
-        id: true;
         name: true;
         image: true;
       };
     };
-    category: true;
+    category: {
+      select: {
+        name: true;
+      };
+    };
     reviews: {
       select: {
         rating: true;
       };
     };
   };
-}>;
+}> & {
+  averageRating: number;
+  reviewCount: number;
+};
 
-// Define the type for the tutor profile with full details as returned by getTutorById
+// for profile
+
 export type TutorDetails = Prisma.TutorProfileGetPayload<{
   include: {
     user: {
@@ -57,4 +70,7 @@ export type TutorDetails = Prisma.TutorProfileGetPayload<{
     };
     availabilitySlots: true;
   };
-}>;
+}> & {
+  averageRating: number;
+  reviewCount: number;
+};

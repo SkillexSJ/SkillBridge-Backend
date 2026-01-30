@@ -53,18 +53,36 @@ const getAllTutors = async (
   const [tutors, total] = await Promise.all([
     prisma.tutorProfile.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        bio: true,
+        specialty: true,
+        experience: true,
+        hourlyRate: true,
+        location: true,
+        totalMentoringMins: true,
+        totalSessions: true,
         user: {
           select: {
-            id: true,
             name: true,
             image: true,
           },
         },
-        category: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
         reviews: {
           select: {
             rating: true,
+          },
+        },
+        availabilitySlots: {
+          select: {
+            dayOfWeek: true,
+            startTime: true,
+            endTime: true,
           },
         },
       },
@@ -75,8 +93,23 @@ const getAllTutors = async (
     prisma.tutorProfile.count({ where }),
   ]);
 
+  // Calculate average rating for each tutor
+  const tutorsWithRating = tutors.map((tutor) => {
+    const avgRating =
+      tutor.reviews.length > 0
+        ? tutor.reviews.reduce((sum, r) => sum + r.rating, 0) /
+          tutor.reviews.length
+        : 0;
+
+    return {
+      ...tutor,
+      averageRating: Number(avgRating.toFixed(1)),
+      reviewCount: tutor.reviews.length,
+    };
+  });
+
   return {
-    data: tutors,
+    data: tutorsWithRating,
     meta: {
       total,
       page,
@@ -111,7 +144,20 @@ const getTutorById = async (id: string): Promise<TutorDetails | null> => {
       availabilitySlots: true,
     },
   });
-  return tutor;
+
+  if (!tutor) return null;
+
+  const reviews = tutor.reviews || [];
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0;
+
+  return {
+    ...tutor,
+    averageRating: Number(averageRating.toFixed(1)),
+    reviewCount: reviews.length,
+  };
 };
 
 const createTutorProfile = async (
@@ -134,7 +180,7 @@ const createTutorProfile = async (
     },
   });
 
-  // Update user role to TUTOR if not already
+  // Update user role to tutor
   await prisma.user.update({
     where: { id: userId },
     data: { role: "tutor" },
@@ -147,13 +193,13 @@ const updateAvailability = async (
   tutorProfileId: string,
   slots: SlotInput[],
 ): Promise<AvailabilitySlot[]> => {
-  // Transaction to replace slots
+  // Transaction
   return await prisma.$transaction(async (tx) => {
     await tx.availabilitySlot.deleteMany({
       where: { tutorProfileId },
     });
 
-    // slots array: { dayOfWeek: number, startTime: string, endTime: string }
+    // slots array:
     const createdSlots = [];
     for (const slot of slots) {
       createdSlots.push(
@@ -161,7 +207,7 @@ const updateAvailability = async (
           data: {
             tutorProfileId,
             dayOfWeek: slot.dayOfWeek,
-            startTime: new Date(`1970-01-01T${slot.startTime}`), // Ensure proper Date objects or handle differently
+            startTime: new Date(`1970-01-01T${slot.startTime}`),
             endTime: new Date(`1970-01-01T${slot.endTime}`),
           },
         }),
@@ -171,9 +217,88 @@ const updateAvailability = async (
   });
 };
 
+const getTutorProfileByUserId = async (userId: string) => {
+  return await prisma.tutorProfile.findUnique({
+    where: { userId },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+      availabilitySlots: true,
+    },
+  });
+};
+
+const updateAvailabilityByUserId = async (
+  userId: string,
+  slots: SlotInput[],
+) => {
+  const profile = await prisma.tutorProfile.findUnique({
+    where: { userId },
+  });
+
+  if (!profile) {
+    throw new Error("Tutor profile not found");
+  }
+
+  return updateAvailability(profile.id, slots);
+};
+
+// For Tutor Dashboard
+const getTutorStats = async (userId: string) => {
+  const profile = await prisma.tutorProfile.findUnique({
+    where: { userId },
+  });
+
+  if (!profile) {
+    throw new Error("Tutor profile not found");
+  }
+
+  // Get total earnings
+  const earnings = await prisma.booking.aggregate({
+    _sum: {
+      totalPrice: true,
+    },
+    where: {
+      tutorProfileId: profile.id,
+      status: "completed",
+    },
+  });
+
+  // Get review stats
+  const reviews = await prisma.review.aggregate({
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: {
+      tutorProfileId: profile.id,
+    },
+  });
+
+  return {
+    totalMentoringMins: profile.totalMentoringMins,
+    totalSessions: profile.totalSessions,
+    totalEarnings: earnings._sum.totalPrice || 0,
+    averageRating: reviews._avg.rating
+      ? Number(reviews._avg.rating.toFixed(1))
+      : 0,
+    totalReviews: reviews._count.rating,
+  };
+};
+
 export const TutorService = {
   getAllTutors,
   getTutorById,
   createTutorProfile,
   updateAvailability,
+  getTutorProfileByUserId,
+  updateAvailabilityByUserId,
+  getTutorStats,
 };
