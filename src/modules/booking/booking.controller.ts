@@ -54,9 +54,14 @@ const updateBookingStatus = asyncHandler(
     const { id } = req.params;
     const { status } = req.body;
 
+    const userId = req.user!.id;
+    const role = req.user!.role;
+
     const result = await BookingService.updateBookingStatus(
       id as string,
       status,
+      userId,
+      role,
     );
     sendSuccess(res, { data: result }, "Booking status updated successfully");
   },

@@ -19,7 +19,6 @@ import { asyncHandler } from "../../middlewares/asyncHandler";
 import { sendSuccess } from "../../utils/response";
 
 const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
-  console.log(req.user);
   const result = await AdminService.getAllUsers(req.query);
   sendSuccess(res, result, "Users fetched successfully");
 });

@@ -140,15 +140,64 @@ const getBookingById = async (
 const updateBookingStatus = async (
   bookingId: string,
   status: BookingStatus,
+  userId: string,
+  role: string,
 ): Promise<Booking> => {
   const result = await prisma.$transaction(async (tx) => {
-    //  Update Booking Status
+    // Get current booking
+    const existingBooking = await tx.booking.findUnique({
+      where: { id: bookingId },
+      include: { tutorProfile: true },
+    });
+
+    if (!existingBooking) {
+      const error: any = new Error("Booking not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    //Cancellation and Update Rules
+    if (role === "student") {
+      // Students can only UPDATE status to 'cancelled'
+      if (status !== "cancelled") {
+        const error: any = new Error("Students can only cancel bookings");
+        error.statusCode = 403;
+        throw error;
+      }
+
+      // only in pending mode
+      if (existingBooking.status !== "pending") {
+        const error: any = new Error(
+          "You can only cancel pending bookings. Valid bookings cannot be cancelled.",
+        );
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // ownership
+      if (existingBooking.studentId !== userId) {
+        const error: any = new Error("Forbidden");
+        error.statusCode = 403;
+        throw error;
+      }
+    } else if (role === "tutor") {
+      //  ownership
+      if (existingBooking.tutorProfile.userId !== userId) {
+        const error: any = new Error(
+          "Forbidden: You can only update your own bookings",
+        );
+        error.statusCode = 403;
+        throw error;
+      }
+    }
+
+    // Update Status
     const booking = await tx.booking.update({
       where: { id: bookingId },
       data: { status },
     });
 
-    // Update Tutor stats
+    // update Tutor stats
     if (status === "completed") {
       const durationMs =
         new Date(booking.endTime).getTime() -

@@ -20,8 +20,8 @@ router.get(
   BookingController.getBookingById,
 );
 router.patch(
-  "/:id/status",
-  authMiddleware(UserRole.TUTOR, UserRole.ADMIN),
+  "/:id",
+  authMiddleware(UserRole.TUTOR, UserRole.ADMIN, UserRole.STUDENT),
   BookingController.updateBookingStatus,
 );
 
