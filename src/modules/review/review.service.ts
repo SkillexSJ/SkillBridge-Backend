@@ -1,7 +1,16 @@
+/**
+ * LIBS
+ */
 import { prisma } from "../../lib/prisma";
+/**
+ * TYPES
+ */
 import { Prisma, Review } from "../../generated/prisma/client";
-import { calculatePagination } from "../../utils/pagination";
 import { CreateReviewInput, ReviewQueryParams } from "./review.type";
+/**
+ * UTILS
+ */
+import { calculatePagination } from "../../utils/pagination";
 
 const createReview = async (
   studentId: string,
@@ -9,7 +18,7 @@ const createReview = async (
 ): Promise<Review> => {
   const { bookingId, rating, comment } = data;
 
-  // Verify booking exists and belongs to student
+  // Verify booking exists
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
     include: { review: true },
@@ -96,7 +105,7 @@ const getAllReviews = async (
 };
 
 const getReviewById = async (id: string): Promise<Review | null> => {
-  return await prisma.review.findUnique({
+  return await prisma.review.findUniqueOrThrow({
     where: { id },
     include: {
       student: {

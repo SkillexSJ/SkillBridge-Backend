@@ -1,6 +1,15 @@
+/**
+ * NODE PACKAGES
+ */
 import { Category } from "../../generated/prisma/client";
+/**
+ * UTILS
+ */
 import { prisma } from "../../lib/prisma";
 import { calculatePagination } from "../../utils/pagination";
+/**
+ * TYPES
+ */
 import { CategoryQueryParams } from "./category.type";
 
 const createCategory = async (data: Category) => {

@@ -1,7 +1,19 @@
+/**
+ * NODE PACKAGES
+ */
 import { Request, Response } from "express";
+/**
+ * SERVICES
+ */
 import { ReviewService } from "./review.service";
+/**
+ * MIDDLEWARES
+ */
 import { asyncHandler } from "../../middlewares/asyncHandler";
-import { sendSuccess } from "../../utils/response";
+/**
+ * UTILS
+ */
+import { sendError, sendSuccess } from "../../utils/response";
 
 const createReview = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
@@ -17,8 +29,7 @@ const getAllReviews = asyncHandler(async (req: Request, res: Response) => {
 const getReviewById = asyncHandler(async (req: Request, res: Response) => {
   const review = await ReviewService.getReviewById(req.params.id as string);
   if (!review) {
-    res.status(404).json({ message: "Review not found" });
-    return;
+    sendError(res, "Review not found", 404);
   }
   sendSuccess(res, { data: review }, "Review fetched successfully");
 });

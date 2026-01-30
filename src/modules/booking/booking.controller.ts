@@ -1,6 +1,21 @@
+/**
+ * NODE PACKAGES
+ */
 import { Request, Response } from "express";
+
+/**
+ * SERVICES
+ */
 import { BookingService } from "./booking.service";
+
+/**
+ * MIDDLEWARES
+ */
 import { asyncHandler } from "../../middlewares/asyncHandler";
+
+/**
+ * UTILS
+ */
 import { sendSuccess } from "../../utils/response";
 
 const createBooking = asyncHandler(async (req: Request, res: Response) => {
@@ -11,33 +26,41 @@ const createBooking = asyncHandler(async (req: Request, res: Response) => {
 
 const getMyBookings = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const role = req.user?.role?.toLowerCase(); // user.role is uppercase in middleware
-  
-  const result = await BookingService.getUserBookings(userId, role || "student", req.query);
+  const role = req.user?.role;
+
+  const result = await BookingService.getUserBookings(
+    userId,
+    role as string,
+    req.query,
+  );
   sendSuccess(res, result, "Bookings fetched successfully");
 });
 
 const getBookingById = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const role = req.user!.role; // "STUDENT" or "TUTOR" or "ADMIN"
+  const role = req.user!.role;
 
   const booking = await BookingService.getBookingById(
     req.params.id as string,
     userId,
-    role,
+    role as string,
   );
 
   sendSuccess(res, { data: booking }, "Booking fetched successfully");
 });
 
-const updateBookingStatus = asyncHandler(async (req: Request, res: Response) => {
-    // Only tutor or admin should do this (checked by middleware)
+const updateBookingStatus = asyncHandler(
+  async (req: Request, res: Response) => {
     const { id } = req.params;
     const { status } = req.body;
-    
-    const result = await BookingService.updateBookingStatus(id as string, status);
+
+    const result = await BookingService.updateBookingStatus(
+      id as string,
+      status,
+    );
     sendSuccess(res, { data: result }, "Booking status updated successfully");
-});
+  },
+);
 
 export const BookingController = {
   createBooking,

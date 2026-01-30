@@ -32,7 +32,7 @@ const getUserBookings = async (
   role: string,
   params: BookingQueryParams = {},
 ): Promise<{
-  data: any[]; // Using any because of dynamic includes based on role
+  data: any[];
   meta: { total: number; page: number; limit: number };
 }> => {
   const { status } = params;
@@ -55,18 +55,28 @@ const getUserBookings = async (
       };
     }
     where.tutorProfileId = tutorProfile.id;
-  } else {
+  } else if (role !== "admin") {
     where.studentId = userId;
   }
 
+  // role based query
   const include: Prisma.BookingInclude =
-    role === "tutor"
-      ? { student: { select: { name: true, image: true, email: true } } }
-      : {
+    role === "admin"
+      ? {
+          student: { select: { name: true, image: true, email: true } },
           tutorProfile: {
-            include: { user: { select: { name: true, image: true } } },
+            include: {
+              user: { select: { name: true, image: true, email: true } },
+            },
           },
-        };
+        }
+      : role === "tutor"
+        ? { student: { select: { name: true, image: true, email: true } } }
+        : {
+            tutorProfile: {
+              include: { user: { select: { name: true, image: true } } },
+            },
+          };
 
   const [bookings, total] = await Promise.all([
     prisma.booking.findMany({
@@ -112,7 +122,7 @@ const getBookingById = async (
     throw error;
   }
 
-  if (role === "ADMIN") return booking;
+  if (role === "admin") return booking;
 
   // Check access
   const isStudent = booking.studentId === userId;
@@ -131,10 +141,33 @@ const updateBookingStatus = async (
   bookingId: string,
   status: BookingStatus,
 ): Promise<Booking> => {
-  return await prisma.booking.update({
-    where: { id: bookingId },
-    data: { status },
+  const result = await prisma.$transaction(async (tx) => {
+    //  Update Booking Status
+    const booking = await tx.booking.update({
+      where: { id: bookingId },
+      data: { status },
+    });
+
+    // Update Tutor stats
+    if (status === "completed") {
+      const durationMs =
+        new Date(booking.endTime).getTime() -
+        new Date(booking.startTime).getTime();
+      const durationMins = Math.floor(durationMs / (1000 * 60));
+
+      await tx.tutorProfile.update({
+        where: { id: booking.tutorProfileId },
+        data: {
+          totalSessions: { increment: 1 },
+          totalMentoringMins: { increment: durationMins },
+        },
+      });
+    }
+
+    return booking;
   });
+
+  return result;
 };
 
 export const BookingService = {

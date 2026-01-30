@@ -1,5 +1,11 @@
-import { prisma } from "../../lib/prisma";
+/**
+ * NODE PACKAGES
+ */
 import { Prisma } from "../../generated/prisma/client";
+/**
+ * UTILS
+ */
+import { prisma } from "../../lib/prisma";
 
 const getProfile = async (userId: string) => {
   const user = await prisma.user.findUnique({
@@ -19,7 +25,53 @@ const updateProfile = async (userId: string, data: Prisma.UserUpdateInput) => {
   return user;
 };
 
+const getStudentDashboardStats = async (userId: string) => {
+  const [completedBookings, activeBookings, totalSpent, user] =
+    await Promise.all([
+      // Total Completed Bookings
+      prisma.booking.count({
+        where: {
+          studentId: userId,
+          status: "completed",
+        },
+      }),
+
+      // Active Bookings
+      prisma.booking.count({
+        where: {
+          studentId: userId,
+          status: { in: ["pending", "confirmed"] },
+        },
+      }),
+
+      // Total Spent
+      prisma.booking.aggregate({
+        _sum: {
+          totalPrice: true,
+        },
+        where: {
+          studentId: userId,
+          status: "completed",
+        },
+      }),
+
+      // joined date
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { createdAt: true },
+      }),
+    ]);
+
+  return {
+    completedBookings,
+    activeBookings,
+    totalSpent: totalSpent._sum.totalPrice || 0,
+    joinedAt: user?.createdAt,
+  };
+};
+
 export const UserService = {
   getProfile,
   updateProfile,
+  getStudentDashboardStats,
 };

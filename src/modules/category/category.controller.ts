@@ -1,7 +1,22 @@
+/**
+ * NODE PACKAGES
+ */
 import { Request, Response } from "express";
+/**
+ * SERVICES
+ */
 import { CategoryService } from "./category.service";
+/**
+ * MIDDLEWARES
+ */
 import { asyncHandler } from "../../middlewares/asyncHandler";
-import { sendCreated, sendSuccess, sendError } from "../../utils/response";
+/**
+ * UTILS
+ */
+import { sendCreated, sendSuccess } from "../../utils/response";
+/**
+ * TYPES
+ */
 import { Category } from "../../generated/prisma/client";
 
 const createCategory = asyncHandler(async (req: Request, res: Response) => {
