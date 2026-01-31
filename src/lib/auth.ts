@@ -120,6 +120,7 @@ export const auth = betterAuth({
       secure: isProduction, // secure in production
       httpOnly: true,
     },
+    trustProxy: true,
   },
   secret: config.better_auth_secret,
 });
