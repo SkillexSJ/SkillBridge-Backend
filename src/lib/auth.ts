@@ -112,6 +112,7 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "http://localhost:5000",
     "http://192.168.9.142:3000",
+    config.client_url,
   ],
   advanced: {
     defaultCookieAttributes: {
