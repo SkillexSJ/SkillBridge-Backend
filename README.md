@@ -145,7 +145,7 @@ Detailed documentation for all API endpoints is available separately.
 
 ## <a name="backend-architecture">Backend Architecture</a>
 
-<details open>
+<details close>
     <summary>Click to expand</summary>
 
 ```mermaid
