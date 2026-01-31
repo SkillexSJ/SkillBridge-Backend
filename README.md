@@ -1,7 +1,7 @@
 <div align="center">
   <br />
     <a href="https://github.com/Start-Impact/skill-bridge-backend" target="_blank">
-      <img align="center" width="158" height="102" style="object-fit: cover;" src="skill.png" alt="Project Banner">
+      <img align="center" width="175" height="170" style="object-fit: cover;" src="skill.png" alt="Project Banner">
     </a>
   <br />
 
