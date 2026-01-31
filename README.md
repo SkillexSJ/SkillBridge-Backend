@@ -144,8 +144,8 @@ Detailed documentation for all API endpoints is available separately.
 👉 **[Explore API Documentation](docs/API.md)**
 
 ## <a name="backend-architecture">Backend Architecture</a>
-
-The following diagram illustrates the request flow through the system:
+<details close>
+    <summary>Click to expand</summary>
 
 ```mermaid
 graph TD
@@ -159,9 +159,12 @@ graph TD
     end
 
     Database[("PostgreSQL Database")]
+    Cloudinary[("Cloudinary Storage")]
 
     Client -->|HTTP Request| Middleware
     Middleware -->|Authenticated Request| Router
+    Router -->|Upload Media| Cloudinary
+    Cloudinary -->|Media URL| Router
     Router -->|Route Handler| Controller
     Controller -->|Process Data| Service
     Service -->|Prisma ORM| Database
@@ -169,10 +172,13 @@ graph TD
     Service -->|Result| Controller
     Controller -->|JSON Response| Client
 
-    style Client fill:#f9f,stroke:#333,stroke-width:2px
-    style Database fill:#bbf,stroke:#333,stroke-width:2px
-    style Middleware fill:#bfb,stroke:#333,stroke-width:1px
+    style Client fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    style Database fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    style Middleware fill:#bfb,stroke:#333,stroke-width:1px,color:#000
+    style Cloudinary fill:#ff9,stroke:#333,stroke-width:2px,color:#000
 ```
+
+</details>
 
 ## <a name="quick-start">Quick Start</a>
 
