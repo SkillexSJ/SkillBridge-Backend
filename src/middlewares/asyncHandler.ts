@@ -1,3 +1,7 @@
+/**
+ * ASYNC HANDLER FOR CONTROLLER
+ */
+
 import { Request, Response, NextFunction } from "express";
 
 type AsyncController = (

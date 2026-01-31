@@ -1,7 +1,21 @@
+/**
+ * NODE PACKAGES
+ */
+import { Server } from "http";
+
+/**
+ * LIBS
+ */
 import app from "./app";
 import { prisma } from "./lib/prisma";
 
-const PORT = process.env.PORT || 5000;
+/**
+ * CONFIG
+ */
+import config from "./config";
+
+const PORT = config.port;
+let server: Server;
 
 async function main() {
   try {
@@ -9,8 +23,8 @@ async function main() {
 
     console.log("Connected to the database successfully.");
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+    server = app.listen(PORT, () => {
+      console.log(`SKILLBRIDGE Server is running on http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("An error occurred:", error);
@@ -20,3 +34,38 @@ async function main() {
 }
 
 main();
+
+// unhandled rejections
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection detected:", err);
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+});
+
+// uncaught exceptions
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception detected:", err);
+  process.exit(1);
+});
+
+// Graceful shutdown
+const gracefulShutdown = async () => {
+  console.log("Shutting down gracefully...");
+  await prisma.$disconnect();
+  if (server) {
+    server.close(() => {
+      console.log("Server closed.");
+      process.exit(0);
+    });
+  } else {
+    process.exit(0);
+  }
+};
+
+process.on("SIGINT", gracefulShutdown);
+process.on("SIGTERM", gracefulShutdown);
