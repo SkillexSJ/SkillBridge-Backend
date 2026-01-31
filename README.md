@@ -149,16 +149,16 @@ The following diagram illustrates the request flow through the system:
 
 ```mermaid
 graph TD
-    Client[Client (Frontend/Postman)]
+    Client["Client (Frontend/Postman)"]
 
     subgraph Server [Express Server]
-        Middleware[Auth Middleware (Better Auth)]
-        Router[Modular Routes (User, Tutor, Booking...)]
-        Controller[Controllers]
-        Service[Services (Business Logic)]
+        Middleware["Auth Middleware (Better Auth)"]
+        Router["Modular Routes (User, Tutor, Booking...)"]
+        Controller["Controllers"]
+        Service["Services (Business Logic)"]
     end
 
-    Database[(PostgreSQL Database)]
+    Database[("PostgreSQL Database")]
 
     Client -->|HTTP Request| Middleware
     Middleware -->|Authenticated Request| Router
