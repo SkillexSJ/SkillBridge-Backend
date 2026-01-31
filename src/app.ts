@@ -32,6 +32,8 @@ import config from "./config";
 
 const app: Application = express();
 
+app.set("trust proxy", true);
+
 app.use(
   cors({
     origin: [
