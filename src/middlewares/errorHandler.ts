@@ -1,5 +1,10 @@
+/**
+ * GLOBAL ERROR HANDLER FOR ALL ERROR CATCHING
+ */
+
 import { Request, Response, NextFunction } from "express";
 import { Prisma } from "../generated/prisma/client";
+import multer from "multer";
 
 function errorHandler(
   err: any,
@@ -7,11 +12,13 @@ function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
-
-
   let statusCode = err.statusCode || err.status || 500;
   let message = err.message || "Internal Server Error";
   let details: any = null;
+
+  if (statusCode === 500) {
+    console.error("🛑 SERVER ERROR:", err);
+  }
 
   // ================================
   // Prisma Validation Error
@@ -19,7 +26,10 @@ function errorHandler(
   if (err instanceof Prisma.PrismaClientValidationError) {
     statusCode = 400;
     message = "Invalid request data";
-    details = err.message;
+    details =
+      process.env.NODE_ENV === "development"
+        ? err.message
+        : "Validation failed";
   }
 
   // ================================
@@ -30,53 +40,52 @@ function errorHandler(
       case "P2002":
         statusCode = 409;
         message = "Duplicate value violates unique constraint";
-        details = err.meta;
+        details = err.meta?.target ? `Field: ${err.meta.target}` : null;
         break;
 
       case "P2025":
         statusCode = 404;
         message = "Requested record not found";
-        details = err.meta;
         break;
 
       case "P2003":
         statusCode = 400;
-        message = "Invalid foreign key reference";
-        details = err.meta;
+        message = "Invalid reference (Foreign Key Constraint)";
+        details = err.meta?.field_name
+          ? `Invalid ID in: ${err.meta.field_name}`
+          : null;
         break;
 
       default:
         statusCode = 400;
         message = "Database request error";
-        details = err.meta;
+
+        details = process.env.NODE_ENV === "development" ? err.meta : null;
     }
   }
 
   // ================================
-  // Prisma Unknown Error
+  // Prisma Unknown/Rust/Init Errors
   // ================================
-  else if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+  else if (
+    err instanceof Prisma.PrismaClientUnknownRequestError ||
+    err instanceof Prisma.PrismaClientRustPanicError ||
+    err instanceof Prisma.PrismaClientInitializationError
+  ) {
     statusCode = 500;
-    message = "Unknown database error occurred";
-    details = err.message;
+    message = "Database connection or internal error";
+    details = null;
+    console.error("🔥 CRITICAL DB ERROR:", err);
   }
 
   // ================================
-  // Prisma Rust Panic Error
+  // Multer Errors
   // ================================
-  else if (err instanceof Prisma.PrismaClientRustPanicError) {
-    statusCode = 500;
-    message = "Critical database error (Rust panic)";
-    details = err.message;
-  }
-
-  // ================================
-  // Prisma Initialization Error
-  // ================================
-  else if (err instanceof Prisma.PrismaClientInitializationError) {
-    statusCode = 500;
-    message = "Failed to initialize database connection";
-    details = err.message;
+  else if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      statusCode = 400;
+      message = "File is too large. Maximum limit is 5MB.";
+    }
   }
 
   // ================================

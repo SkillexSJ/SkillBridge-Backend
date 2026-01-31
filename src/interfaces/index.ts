@@ -1,3 +1,7 @@
+/**
+ * INTERFACES for query params and pagination
+ */
+
 export interface BaseQueryParams {
   page?: number | string;
   limit?: number | string;

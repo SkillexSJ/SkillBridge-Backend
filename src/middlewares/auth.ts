@@ -1,11 +1,18 @@
+/**
+ * NODE PACKAGES
+ */
 import { NextFunction, Request, Response } from "express";
+
+/**
+ * UTILS
+ */
 import { auth } from "../lib/auth";
 import { sendError, sendForbidden, sendUnauthorized } from "../utils/response";
 
 export enum UserRole {
-  ADMIN = "ADMIN",
-  STUDENT = "STUDENT",
-  TUTOR = "TUTOR",
+  ADMIN = "admin",
+  STUDENT = "student",
+  TUTOR = "tutor",
 }
 
 declare global {
@@ -46,7 +53,7 @@ const authMiddleware = (...roles: UserRole[]) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role.toUpperCase(),
+        role: user.role as UserRole,
         emailVerified: user.emailVerified,
         isBlocked: !!user.isBlocked,
       };

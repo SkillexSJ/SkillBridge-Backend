@@ -14,13 +14,14 @@ model TutorProfile {
   category             Category           @relation(fields: [categoryId], references: [id])
   bio                  String             @db.Text
   specialty            String
-  experience           String
+  experience           Int                @default(0)
   hourlyRate           Decimal
   location             String?
-  expertise            String[] @default([]) // Stored as array of strings
-  socialLinks          String[] @default([])// Stored as JSON 
+  expertise            String[] @default([]) 
+  socialLinks          String[] @default([])
   totalMentoringMins   Int                @default(0)
   totalSessions        Int                @default(0)
+  averageRating        Float              @default(0)
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
   bookings             Booking[]
@@ -40,7 +41,6 @@ model User {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   role            Role          @default(student)
-  isVerified      Boolean       @default(false)
   isBlocked       Boolean       @default(false)
   sessions        Session[]
   accounts        Account[]
