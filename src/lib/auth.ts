@@ -116,8 +116,8 @@ export const auth = betterAuth({
   ],
   advanced: {
     defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: isProduction,
+      sameSite: "none",
+      secure: true,
       httpOnly: true,
     },
   },
