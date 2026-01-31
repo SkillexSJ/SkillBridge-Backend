@@ -178,8 +178,6 @@ graph TD
     style Cloudinary fill:#ff9,stroke:#333,stroke-width:2px,color:#000
 ```
 
-</details>
-
 ## <a name="quick-start">Quick Start</a>
 
 Follow these steps to set up the project locally.
