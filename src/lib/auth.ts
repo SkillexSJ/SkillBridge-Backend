@@ -121,6 +121,14 @@ export const auth = betterAuth({
       httpOnly: true,
     },
     trustProxy: true,
+    cookies: {
+      state: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+        },
+      },
+    },
   },
   secret: config.better_auth_secret,
 });
