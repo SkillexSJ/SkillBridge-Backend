@@ -145,8 +145,7 @@ Detailed documentation for all API endpoints is available separately.
 
 ## <a name="backend-architecture">Backend Architecture</a>
 
-<details close>
-    <summary>Click to expand</summary>
+The following diagram illustrates the request flow through the system:
 
 ```mermaid
 graph TD
