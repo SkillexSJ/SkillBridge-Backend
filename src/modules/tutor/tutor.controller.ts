@@ -22,10 +22,16 @@ const getAllTutors = asyncHandler(async (req: Request, res: Response) => {
 
 const getTutorById = asyncHandler(async (req: Request, res: Response) => {
   const tutor = await TutorService.getTutorById(req.params.id as string);
-  if (!tutor) {
-    sendError(res, "Tutor not found", 404);
-  }
   sendSuccess(res, { data: tutor }, "Tutor fetched successfully");
+});
+
+const updateMyProfile = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+  const updatedProfile = await TutorService.updateTutorProfile(
+    userId,
+    req.body,
+  );
+  sendSuccess(res, { data: updatedProfile }, "Profile updated successfully");
 });
 
 const createTutorProfile = asyncHandler(async (req: Request, res: Response) => {
@@ -48,11 +54,6 @@ const getMyProfile = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const tutor = await TutorService.getTutorProfileByUserId(userId);
 
-  if (!tutor) {
-    sendError(res, "Tutor profile not found", 404);
-    return;
-  }
-
   sendSuccess(res, { data: tutor }, "Tutor profile fetched successfully");
 });
 
@@ -66,6 +67,7 @@ export const TutorController = {
   getAllTutors,
   getTutorById,
   getMyProfile,
+  updateMyProfile,
   createTutorProfile,
   updateAvailability,
   getTutorStats,

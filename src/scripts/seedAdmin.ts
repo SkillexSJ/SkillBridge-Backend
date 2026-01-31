@@ -1,11 +1,12 @@
 import { prisma } from "../lib/prisma";
 import { auth } from "../lib/auth";
+import config from "../config";
 
 async function seedAdmin() {
   console.log("******** Admin Seeding Started ********");
 
-  const adminEmail = "sajid@admin.com";
-  const adminPassword = "sajid1234";
+  const adminEmail = config.admin_email as string;
+  const adminPassword = config.admin_password as string;
 
   try {
     const existingAdmin = await prisma.user.findUnique({
@@ -28,7 +29,10 @@ async function seedAdmin() {
     if (newAdmin) {
       await prisma.user.update({
         where: { email: adminEmail },
-        data: { role: "admin" },
+        data: {
+          role: "admin",
+          emailVerified: true,
+        },
       });
 
       console.log("✅ Admin user created successfully via Better Auth API");

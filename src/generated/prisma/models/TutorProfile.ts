@@ -27,15 +27,19 @@ export type AggregateTutorProfile = {
 }
 
 export type TutorProfileAvgAggregateOutputType = {
+  experience: number | null
   hourlyRate: runtime.Decimal | null
   totalMentoringMins: number | null
   totalSessions: number | null
+  averageRating: number | null
 }
 
 export type TutorProfileSumAggregateOutputType = {
+  experience: number | null
   hourlyRate: runtime.Decimal | null
   totalMentoringMins: number | null
   totalSessions: number | null
+  averageRating: number | null
 }
 
 export type TutorProfileMinAggregateOutputType = {
@@ -44,11 +48,12 @@ export type TutorProfileMinAggregateOutputType = {
   categoryId: string | null
   bio: string | null
   specialty: string | null
-  experience: string | null
+  experience: number | null
   hourlyRate: runtime.Decimal | null
   location: string | null
   totalMentoringMins: number | null
   totalSessions: number | null
+  averageRating: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,11 +64,12 @@ export type TutorProfileMaxAggregateOutputType = {
   categoryId: string | null
   bio: string | null
   specialty: string | null
-  experience: string | null
+  experience: number | null
   hourlyRate: runtime.Decimal | null
   location: string | null
   totalMentoringMins: number | null
   totalSessions: number | null
+  averageRating: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -81,6 +87,7 @@ export type TutorProfileCountAggregateOutputType = {
   socialLinks: number
   totalMentoringMins: number
   totalSessions: number
+  averageRating: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -88,15 +95,19 @@ export type TutorProfileCountAggregateOutputType = {
 
 
 export type TutorProfileAvgAggregateInputType = {
+  experience?: true
   hourlyRate?: true
   totalMentoringMins?: true
   totalSessions?: true
+  averageRating?: true
 }
 
 export type TutorProfileSumAggregateInputType = {
+  experience?: true
   hourlyRate?: true
   totalMentoringMins?: true
   totalSessions?: true
+  averageRating?: true
 }
 
 export type TutorProfileMinAggregateInputType = {
@@ -110,6 +121,7 @@ export type TutorProfileMinAggregateInputType = {
   location?: true
   totalMentoringMins?: true
   totalSessions?: true
+  averageRating?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -125,6 +137,7 @@ export type TutorProfileMaxAggregateInputType = {
   location?: true
   totalMentoringMins?: true
   totalSessions?: true
+  averageRating?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -142,6 +155,7 @@ export type TutorProfileCountAggregateInputType = {
   socialLinks?: true
   totalMentoringMins?: true
   totalSessions?: true
+  averageRating?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -239,13 +253,14 @@ export type TutorProfileGroupByOutputType = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience: number
   hourlyRate: runtime.Decimal
   location: string | null
   expertise: string[]
   socialLinks: string[]
   totalMentoringMins: number
   totalSessions: number
+  averageRating: number
   createdAt: Date
   updatedAt: Date
   _count: TutorProfileCountAggregateOutputType | null
@@ -279,13 +294,14 @@ export type TutorProfileWhereInput = {
   categoryId?: Prisma.StringFilter<"TutorProfile"> | string
   bio?: Prisma.StringFilter<"TutorProfile"> | string
   specialty?: Prisma.StringFilter<"TutorProfile"> | string
-  experience?: Prisma.StringFilter<"TutorProfile"> | string
+  experience?: Prisma.IntFilter<"TutorProfile"> | number
   hourlyRate?: Prisma.DecimalFilter<"TutorProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.StringNullableFilter<"TutorProfile"> | string | null
   expertise?: Prisma.StringNullableListFilter<"TutorProfile">
   socialLinks?: Prisma.StringNullableListFilter<"TutorProfile">
   totalMentoringMins?: Prisma.IntFilter<"TutorProfile"> | number
   totalSessions?: Prisma.IntFilter<"TutorProfile"> | number
+  averageRating?: Prisma.FloatFilter<"TutorProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"TutorProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TutorProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -308,6 +324,7 @@ export type TutorProfileOrderByWithRelationInput = {
   socialLinks?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -326,13 +343,14 @@ export type TutorProfileWhereUniqueInput = Prisma.AtLeast<{
   categoryId?: Prisma.StringFilter<"TutorProfile"> | string
   bio?: Prisma.StringFilter<"TutorProfile"> | string
   specialty?: Prisma.StringFilter<"TutorProfile"> | string
-  experience?: Prisma.StringFilter<"TutorProfile"> | string
+  experience?: Prisma.IntFilter<"TutorProfile"> | number
   hourlyRate?: Prisma.DecimalFilter<"TutorProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.StringNullableFilter<"TutorProfile"> | string | null
   expertise?: Prisma.StringNullableListFilter<"TutorProfile">
   socialLinks?: Prisma.StringNullableListFilter<"TutorProfile">
   totalMentoringMins?: Prisma.IntFilter<"TutorProfile"> | number
   totalSessions?: Prisma.IntFilter<"TutorProfile"> | number
+  averageRating?: Prisma.FloatFilter<"TutorProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"TutorProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TutorProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -355,6 +373,7 @@ export type TutorProfileOrderByWithAggregationInput = {
   socialLinks?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TutorProfileCountOrderByAggregateInput
@@ -373,13 +392,14 @@ export type TutorProfileScalarWhereWithAggregatesInput = {
   categoryId?: Prisma.StringWithAggregatesFilter<"TutorProfile"> | string
   bio?: Prisma.StringWithAggregatesFilter<"TutorProfile"> | string
   specialty?: Prisma.StringWithAggregatesFilter<"TutorProfile"> | string
-  experience?: Prisma.StringWithAggregatesFilter<"TutorProfile"> | string
+  experience?: Prisma.IntWithAggregatesFilter<"TutorProfile"> | number
   hourlyRate?: Prisma.DecimalWithAggregatesFilter<"TutorProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.StringNullableWithAggregatesFilter<"TutorProfile"> | string | null
   expertise?: Prisma.StringNullableListFilter<"TutorProfile">
   socialLinks?: Prisma.StringNullableListFilter<"TutorProfile">
   totalMentoringMins?: Prisma.IntWithAggregatesFilter<"TutorProfile"> | number
   totalSessions?: Prisma.IntWithAggregatesFilter<"TutorProfile"> | number
+  averageRating?: Prisma.FloatWithAggregatesFilter<"TutorProfile"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TutorProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TutorProfile"> | Date | string
 }
@@ -388,13 +408,14 @@ export type TutorProfileCreateInput = {
   id?: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTutorProfileInput
@@ -410,13 +431,14 @@ export type TutorProfileUncheckedCreateInput = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorProfileInput
@@ -428,13 +450,14 @@ export type TutorProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTutorProfileNestedInput
@@ -450,13 +473,14 @@ export type TutorProfileUncheckedUpdateInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorProfileNestedInput
@@ -470,13 +494,14 @@ export type TutorProfileCreateManyInput = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -485,13 +510,14 @@ export type TutorProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -502,13 +528,14 @@ export type TutorProfileUncheckedUpdateManyInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -534,14 +561,17 @@ export type TutorProfileCountOrderByAggregateInput = {
   socialLinks?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type TutorProfileAvgOrderByAggregateInput = {
+  experience?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
 }
 
 export type TutorProfileMaxOrderByAggregateInput = {
@@ -555,6 +585,7 @@ export type TutorProfileMaxOrderByAggregateInput = {
   location?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -570,14 +601,17 @@ export type TutorProfileMinOrderByAggregateInput = {
   location?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type TutorProfileSumOrderByAggregateInput = {
+  experience?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   totalMentoringMins?: Prisma.SortOrder
   totalSessions?: Prisma.SortOrder
+  averageRating?: Prisma.SortOrder
 }
 
 export type TutorProfileNullableScalarRelationFilter = {
@@ -612,6 +646,14 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -634,7 +676,7 @@ export type TutorProfileUpdatesocialLinksInput = {
   push?: string | string[]
 }
 
-export type IntFieldUpdateOperationsInput = {
+export type FloatFieldUpdateOperationsInput = {
   set?: number
   increment?: number
   decrement?: number
@@ -766,13 +808,14 @@ export type TutorProfileCreateWithoutUserInput = {
   id?: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutTutorProfilesInput
@@ -786,13 +829,14 @@ export type TutorProfileUncheckedCreateWithoutUserInput = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorProfileInput
@@ -820,13 +864,14 @@ export type TutorProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutTutorProfilesNestedInput
@@ -840,13 +885,14 @@ export type TutorProfileUncheckedUpdateWithoutUserInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorProfileNestedInput
@@ -858,13 +904,14 @@ export type TutorProfileCreateWithoutBookingsInput = {
   id?: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTutorProfileInput
@@ -879,13 +926,14 @@ export type TutorProfileUncheckedCreateWithoutBookingsInput = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTutorProfileInput
@@ -912,13 +960,14 @@ export type TutorProfileUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTutorProfileNestedInput
@@ -933,13 +982,14 @@ export type TutorProfileUncheckedUpdateWithoutBookingsInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTutorProfileNestedInput
@@ -950,13 +1000,14 @@ export type TutorProfileCreateWithoutCategoryInput = {
   id?: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTutorProfileInput
@@ -970,13 +1021,14 @@ export type TutorProfileUncheckedCreateWithoutCategoryInput = {
   userId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorProfileInput
@@ -1019,13 +1071,14 @@ export type TutorProfileScalarWhereInput = {
   categoryId?: Prisma.StringFilter<"TutorProfile"> | string
   bio?: Prisma.StringFilter<"TutorProfile"> | string
   specialty?: Prisma.StringFilter<"TutorProfile"> | string
-  experience?: Prisma.StringFilter<"TutorProfile"> | string
+  experience?: Prisma.IntFilter<"TutorProfile"> | number
   hourlyRate?: Prisma.DecimalFilter<"TutorProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.StringNullableFilter<"TutorProfile"> | string | null
   expertise?: Prisma.StringNullableListFilter<"TutorProfile">
   socialLinks?: Prisma.StringNullableListFilter<"TutorProfile">
   totalMentoringMins?: Prisma.IntFilter<"TutorProfile"> | number
   totalSessions?: Prisma.IntFilter<"TutorProfile"> | number
+  averageRating?: Prisma.FloatFilter<"TutorProfile"> | number
   createdAt?: Prisma.DateTimeFilter<"TutorProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TutorProfile"> | Date | string
 }
@@ -1034,13 +1087,14 @@ export type TutorProfileCreateWithoutReviewsInput = {
   id?: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTutorProfileInput
@@ -1055,13 +1109,14 @@ export type TutorProfileUncheckedCreateWithoutReviewsInput = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorProfileInput
@@ -1088,13 +1143,14 @@ export type TutorProfileUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTutorProfileNestedInput
@@ -1109,13 +1165,14 @@ export type TutorProfileUncheckedUpdateWithoutReviewsInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorProfileNestedInput
@@ -1126,13 +1183,14 @@ export type TutorProfileCreateWithoutAvailabilitySlotsInput = {
   id?: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTutorProfileInput
@@ -1147,13 +1205,14 @@ export type TutorProfileUncheckedCreateWithoutAvailabilitySlotsInput = {
   categoryId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorProfileInput
@@ -1180,13 +1239,14 @@ export type TutorProfileUpdateWithoutAvailabilitySlotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTutorProfileNestedInput
@@ -1201,13 +1261,14 @@ export type TutorProfileUncheckedUpdateWithoutAvailabilitySlotsInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorProfileNestedInput
@@ -1219,13 +1280,14 @@ export type TutorProfileCreateManyCategoryInput = {
   userId: string
   bio: string
   specialty: string
-  experience: string
+  experience?: number
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: string | null
   expertise?: Prisma.TutorProfileCreateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileCreatesocialLinksInput | string[]
   totalMentoringMins?: number
   totalSessions?: number
+  averageRating?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1234,13 +1296,14 @@ export type TutorProfileUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTutorProfileNestedInput
@@ -1254,13 +1317,14 @@ export type TutorProfileUncheckedUpdateWithoutCategoryInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorProfileNestedInput
@@ -1273,13 +1337,14 @@ export type TutorProfileUncheckedUpdateManyWithoutCategoryInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.StringFieldUpdateOperationsInput | string
   specialty?: Prisma.StringFieldUpdateOperationsInput | string
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expertise?: Prisma.TutorProfileUpdateexpertiseInput | string[]
   socialLinks?: Prisma.TutorProfileUpdatesocialLinksInput | string[]
   totalMentoringMins?: Prisma.IntFieldUpdateOperationsInput | number
   totalSessions?: Prisma.IntFieldUpdateOperationsInput | number
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1346,6 +1411,7 @@ export type TutorProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   socialLinks?: boolean
   totalMentoringMins?: boolean
   totalSessions?: boolean
+  averageRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1369,6 +1435,7 @@ export type TutorProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   socialLinks?: boolean
   totalMentoringMins?: boolean
   totalSessions?: boolean
+  averageRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1388,6 +1455,7 @@ export type TutorProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   socialLinks?: boolean
   totalMentoringMins?: boolean
   totalSessions?: boolean
+  averageRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1407,11 +1475,12 @@ export type TutorProfileSelectScalar = {
   socialLinks?: boolean
   totalMentoringMins?: boolean
   totalSessions?: boolean
+  averageRating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TutorProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "categoryId" | "bio" | "specialty" | "experience" | "hourlyRate" | "location" | "expertise" | "socialLinks" | "totalMentoringMins" | "totalSessions" | "createdAt" | "updatedAt", ExtArgs["result"]["tutorProfile"]>
+export type TutorProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "categoryId" | "bio" | "specialty" | "experience" | "hourlyRate" | "location" | "expertise" | "socialLinks" | "totalMentoringMins" | "totalSessions" | "averageRating" | "createdAt" | "updatedAt", ExtArgs["result"]["tutorProfile"]>
 export type TutorProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1444,13 +1513,14 @@ export type $TutorProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     categoryId: string
     bio: string
     specialty: string
-    experience: string
+    experience: number
     hourlyRate: runtime.Decimal
     location: string | null
     expertise: string[]
     socialLinks: string[]
     totalMentoringMins: number
     totalSessions: number
+    averageRating: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["tutorProfile"]>
@@ -1886,13 +1956,14 @@ export interface TutorProfileFieldRefs {
   readonly categoryId: Prisma.FieldRef<"TutorProfile", 'String'>
   readonly bio: Prisma.FieldRef<"TutorProfile", 'String'>
   readonly specialty: Prisma.FieldRef<"TutorProfile", 'String'>
-  readonly experience: Prisma.FieldRef<"TutorProfile", 'String'>
+  readonly experience: Prisma.FieldRef<"TutorProfile", 'Int'>
   readonly hourlyRate: Prisma.FieldRef<"TutorProfile", 'Decimal'>
   readonly location: Prisma.FieldRef<"TutorProfile", 'String'>
   readonly expertise: Prisma.FieldRef<"TutorProfile", 'String[]'>
   readonly socialLinks: Prisma.FieldRef<"TutorProfile", 'String[]'>
   readonly totalMentoringMins: Prisma.FieldRef<"TutorProfile", 'Int'>
   readonly totalSessions: Prisma.FieldRef<"TutorProfile", 'Int'>
+  readonly averageRating: Prisma.FieldRef<"TutorProfile", 'Float'>
   readonly createdAt: Prisma.FieldRef<"TutorProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TutorProfile", 'DateTime'>
 }

@@ -1,6 +1,18 @@
+/**
+ * NODE PACKAGES
+ */
 import { prisma } from "../../lib/prisma";
+/**
+ * PRISMA CLIENT
+ */
 import { BookingStatus, Prisma, Booking } from "../../generated/prisma/client";
+/**
+ * UTILS
+ */
 import { calculatePagination } from "../../utils/pagination";
+/**
+ * TYPES
+ */
 import {
   CreateBookingInput,
   BookingQueryParams,
@@ -78,6 +90,7 @@ const getUserBookings = async (
             },
           };
 
+  // booking + total count
   const [bookings, total] = await Promise.all([
     prisma.booking.findMany({
       where,
@@ -104,6 +117,7 @@ const getBookingById = async (
   userId: string,
   role: string,
 ): Promise<BookingDetails> => {
+  // booking with tutor and student
   const booking = await prisma.booking.findUnique({
     where: { id },
     include: {
@@ -121,7 +135,7 @@ const getBookingById = async (
     error.statusCode = 404;
     throw error;
   }
-
+  // admin shob pabe
   if (role === "admin") return booking;
 
   // Check access

@@ -28,15 +28,39 @@ const createReview = async (
   if (booking.studentId !== studentId) throw new Error("Unauthorized");
   if (booking.review) throw new Error("Review already exists");
 
-  return await prisma.review.create({
-    data: {
-      bookingId,
-      studentId,
-      tutorProfileId: booking.tutorProfileId,
-      rating: Number(rating),
-      comment: comment || "",
-    },
+  const result = await prisma.$transaction(async (tx) => {
+    // 1. Create Review
+    const review = await tx.review.create({
+      data: {
+        bookingId,
+        studentId,
+        tutorProfileId: booking.tutorProfileId,
+        rating: Number(rating),
+        comment: comment || "",
+      },
+    });
+
+    // 2. Recalculate Average Rating
+    const reviews = await tx.review.findMany({
+      where: { tutorProfileId: booking.tutorProfileId },
+      select: { rating: true },
+    });
+
+    const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
+    const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0;
+
+    // 3. Update Tutor Profile
+    await tx.tutorProfile.update({
+      where: { id: booking.tutorProfileId },
+      data: {
+        averageRating: Number(averageRating.toFixed(2)),
+      },
+    });
+
+    return review;
   });
+
+  return result;
 };
 
 const getAllReviews = async (
@@ -105,7 +129,7 @@ const getAllReviews = async (
 };
 
 const getReviewById = async (id: string): Promise<Review | null> => {
-  return await prisma.review.findUniqueOrThrow({
+  const review = await prisma.review.findUnique({
     where: { id },
     include: {
       student: {
@@ -127,6 +151,14 @@ const getReviewById = async (id: string): Promise<Review | null> => {
       },
     },
   });
+
+  if (!review) {
+    const error: any = new Error("Review not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return review;
 };
 
 export const ReviewService = {

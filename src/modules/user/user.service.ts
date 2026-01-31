@@ -51,7 +51,7 @@ const getStudentDashboardStats = async (userId: string) => {
         },
         where: {
           studentId: userId,
-          status: "completed",
+          status: { in: ["completed", "confirmed"] },
         },
       }),
 

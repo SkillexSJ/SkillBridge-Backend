@@ -7,6 +7,7 @@ export interface TutorQueryParams extends BaseQueryParams {
   maxPrice?: string;
 }
 
+// time slot
 export interface SlotInput {
   dayOfWeek: number;
   startTime: string;
@@ -23,6 +24,7 @@ export type TutorWithRelations = Prisma.TutorProfileGetPayload<{
     location: true;
     totalMentoringMins: true;
     totalSessions: true;
+    averageRating: true;
     user: {
       select: {
         name: true;

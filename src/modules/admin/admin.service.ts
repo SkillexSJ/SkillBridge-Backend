@@ -39,7 +39,11 @@ const getAllUsers = async (params: UserQueryParams = {}) => {
 
 const blockUser = async (userId: string) => {
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user) throw new Error("User not found");
+  if (!user) {
+    const error: any = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
 
   return await prisma.user.update({
     where: { id: userId },
@@ -56,6 +60,7 @@ const getDashboardStats = async () => {
     totalRevenue,
     activeTutors,
     recentBookings,
+    bookingsByStatus,
   ] = await Promise.all([
     // Total Students
     prisma.user.count({ where: { role: "student" } }),
@@ -72,7 +77,7 @@ const getDashboardStats = async () => {
         totalPrice: true,
       },
       where: {
-        status: "completed",
+        status: { in: ["confirmed", "completed"] },
       },
     }),
 
@@ -95,6 +100,7 @@ const getDashboardStats = async () => {
           select: {
             name: true,
             email: true,
+            image: true,
           },
         },
         tutorProfile: {
@@ -104,8 +110,21 @@ const getDashboardStats = async () => {
                 name: true,
               },
             },
+            category: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
+      },
+    }),
+
+    // Bookings by Status
+    prisma.booking.groupBy({
+      by: ["status"],
+      _count: {
+        status: true,
       },
     }),
   ]);
@@ -119,6 +138,10 @@ const getDashboardStats = async () => {
     bookings: {
       total: totalBookings,
       recent: recentBookings,
+      byStatus: bookingsByStatus.map((item) => ({
+        status: item.status,
+        count: item._count.status,
+      })),
     },
     revenue: {
       total: totalRevenue._sum.totalPrice || 0,

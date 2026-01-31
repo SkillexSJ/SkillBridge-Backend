@@ -13,7 +13,7 @@ import { asyncHandler } from "../../middlewares/asyncHandler";
 /**
  * UTILS
  */
-import { sendError, sendSuccess } from "../../utils/response";
+import { sendSuccess } from "../../utils/response";
 
 const createReview = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
@@ -28,9 +28,6 @@ const getAllReviews = asyncHandler(async (req: Request, res: Response) => {
 
 const getReviewById = asyncHandler(async (req: Request, res: Response) => {
   const review = await ReviewService.getReviewById(req.params.id as string);
-  if (!review) {
-    sendError(res, "Review not found", 404);
-  }
   sendSuccess(res, { data: review }, "Review fetched successfully");
 });
 

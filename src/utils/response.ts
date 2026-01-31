@@ -1,3 +1,7 @@
+/**
+ * Response Manager for standardized API responses
+ */
+
 import type { Response } from "express";
 
 export const sendCreated = (
@@ -13,6 +17,7 @@ export const sendCreated = (
   });
 };
 
+// success
 export const sendSuccess = (
   res: Response,
   result: { data: any; meta?: any },
@@ -27,6 +32,7 @@ export const sendSuccess = (
   });
 };
 
+// error
 export const sendError = (
   res: Response,
   message: string,
@@ -45,6 +51,7 @@ export const sendError = (
   res.status(statusCode).json(response);
 };
 
+// unauthorized
 export const sendUnauthorized = (
   res: Response,
   message: string = "Unauthorized",
@@ -52,6 +59,7 @@ export const sendUnauthorized = (
   sendError(res, message, 401);
 };
 
+// forbidden
 export const sendForbidden = (res: Response, message: string = "Forbidden") => {
   sendError(res, message, 403);
 };

@@ -91,6 +91,7 @@ export const TutorProfileScalarFieldEnum = {
   socialLinks: 'socialLinks',
   totalMentoringMins: 'totalMentoringMins',
   totalSessions: 'totalSessions',
+  averageRating: 'averageRating',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -107,7 +108,6 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   role: 'role',
-  isVerified: 'isVerified',
   isBlocked: 'isBlocked'
 } as const
 
