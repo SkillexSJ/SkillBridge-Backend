@@ -173,7 +173,9 @@ const getTutorById = async (id: string): Promise<TutorDetails | null> => {
 
 const createTutorProfile = async (
   userId: string,
-  data: Prisma.TutorProfileUncheckedCreateInput,
+  data: Prisma.TutorProfileUncheckedCreateInput & {
+    availability?: SlotInput[]; // extra
+  },
 ): Promise<TutorProfile> => {
   // Check if profile exists
   const existing = await prisma.tutorProfile.findUnique({
@@ -186,17 +188,38 @@ const createTutorProfile = async (
     throw error;
   }
 
-  const profile = await prisma.tutorProfile.create({
-    data: {
-      ...data,
-      userId,
-    },
-  });
+  // Extract availability
+  const { availability, ...profileData } = data;
 
-  // Update user role to tutor
-  await prisma.user.update({
-    where: { id: userId },
-    data: { role: "tutor" },
+  // transaction
+  const profile = await prisma.$transaction(async (tx) => {
+    // 1. Create the tutor profile
+    const newProfile = await tx.tutorProfile.create({
+      data: {
+        ...profileData,
+        userId,
+      },
+    });
+
+    // 2. Update user role to tutor
+    await tx.user.update({
+      where: { id: userId },
+      data: { role: "tutor" },
+    });
+
+    // 3. Create availability slots if provided
+    if (availability && availability.length > 0) {
+      await tx.availabilitySlot.createMany({
+        data: availability.map((slot) => ({
+          tutorProfileId: newProfile.id,
+          dayOfWeek: slot.dayOfWeek,
+          startTime: new Date(`1970-01-01T${slot.startTime}`),
+          endTime: new Date(`1970-01-01T${slot.endTime}`),
+        })),
+      });
+    }
+
+    return newProfile;
   });
 
   return profile;
