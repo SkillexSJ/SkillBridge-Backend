@@ -203,6 +203,12 @@ const updateBookingStatus = async (
         error.statusCode = 403;
         throw error;
       }
+
+      if (existingBooking.status === "completed" && status === "cancelled") {
+        const error: any = new Error("Cannot cancel a completed booking");
+        error.statusCode = 400;
+        throw error;
+      }
     }
 
     // Update Status
