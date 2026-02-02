@@ -88,6 +88,7 @@ const getUserBookings = async (
             tutorProfile: {
               include: { user: { select: { name: true, image: true } } },
             },
+            review: { select: { id: true } },
           };
 
   // booking + total count
