@@ -86,7 +86,10 @@ const getUserBookings = async (
         ? { student: { select: { name: true, image: true, email: true } } }
         : {
             tutorProfile: {
-              include: { user: { select: { name: true, image: true } } },
+              include: {
+                user: { select: { name: true, image: true } },
+                category: { select: { name: true } },
+              },
             },
             review: { select: { id: true } },
           };
