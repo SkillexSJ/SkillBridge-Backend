@@ -83,7 +83,14 @@ const getUserBookings = async (
           },
         }
       : role === "tutor"
-        ? { student: { select: { name: true, image: true, email: true } } }
+        ? {
+            student: { select: { name: true, image: true, email: true } },
+            tutorProfile: {
+              include: {
+                category: { select: { name: true } },
+              },
+            },
+          }
         : {
             tutorProfile: {
               include: {
